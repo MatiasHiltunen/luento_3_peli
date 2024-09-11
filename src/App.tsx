@@ -1,10 +1,11 @@
-import { CSSProperties, useState } from "react"
+import { CSSProperties, useEffect, useState } from "react"
 import styled from "styled-components"
 
 const Layout = styled.div`
   background-color: darkblue;
   width: 100%;
   height: 100vh;
+  color: white;
 `
 const Navigation = styled.nav`
   width: 100%;
@@ -28,15 +29,23 @@ const Points = styled.div`
   margin-right: 20px;
 `
 
+type BallProps = {
+  x: number
+  y: number
+}
 
-
-function Ball() {
+function Ball({x,y}:BallProps) {
 
   const style: CSSProperties = {
     backgroundColor: 'red',
     width: "50px",
     height: "50px",
-    borderRadius: "50%"
+    borderRadius: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems:"center",
+    color: "white",
+    transform: `translate(${x}px, ${y}px)`
   }
 
   const [points, setPoints] = useState(0)
@@ -46,16 +55,48 @@ function Ball() {
   </div>
 }
 
+function useResize() {
+  const [width, setWidth] = useState(window.innerWidth)
+  const [height, setHeight] = useState(window.innerHeight)
+
+  useEffect(()=>{
+    
+    function handleResize() {
+      setWidth(window.innerWidth)
+      setHeight(window.innerHeight)
+    }
+
+    window.addEventListener("resize", handleResize)
+
+    return ()=>{
+      window.removeEventListener("resize", handleResize) 
+    }
+  
+  }, [])
+
+  return {width, height}
+
+}
+
+function randomInteger(min, max){
+
+
+
+}
+
 export default function App(){
 
-  return <Layout>
+  const {width, height} = useResize()
 
+
+
+  return <Layout>
     <Navigation>
       <HomeButton>Home</HomeButton>
       <Points></Points>
     </Navigation>
 
-    <Ball></Ball>
+    <Ball x={300} y={500}></Ball>
 
   </Layout>
 
