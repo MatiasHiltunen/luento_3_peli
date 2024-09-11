@@ -78,9 +78,11 @@ function useResize() {
 
 }
 
-function randomInteger(min, max){
+function randomInteger(min: number, max: number){
 
+  const random = (Math.random() * (max - min)) + min
 
+  return Math.floor(random)
 
 }
 
@@ -88,7 +90,8 @@ export default function App(){
 
   const {width, height} = useResize()
 
-
+  const x = randomInteger(50, width-50)
+  const y = randomInteger(50, height-50)
 
   return <Layout>
     <Navigation>
@@ -96,7 +99,7 @@ export default function App(){
       <Points></Points>
     </Navigation>
 
-    <Ball x={300} y={500}></Ball>
+    <Ball x={x} y={y}></Ball>
 
   </Layout>
 
