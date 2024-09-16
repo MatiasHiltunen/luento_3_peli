@@ -1,11 +1,15 @@
 import { CSSProperties, useEffect, useState } from "react"
 import styled from "styled-components"
+import { supabase } from "./supabase"
 
 const Layout = styled.div`
   background-color: darkblue;
   width: 100%;
   height: 100vh;
   color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 `
 const Navigation = styled.nav`
   width: 100%;
@@ -124,8 +128,7 @@ function randomInteger(min: number, max: number) {
 
 }
 
-export default function App() {
-
+function Game() {
   const { width, height } = useResize()
 
   
@@ -146,6 +149,70 @@ export default function App() {
 
     {allBalls}
 
+  </Layout>
+
+}
+
+interface RankingItem {
+  id: number
+  created_at: string
+  nickname: string
+  points: number
+}
+
+function RankingList(){
+
+  const [list, setList] = useState<RankingItem[]>([])
+
+  useEffect(()=>{
+
+    supabase.from('ranking').select("*").limit(10).then(({data, error})=>{
+      
+      console.log(data, error)
+      if(data){
+        setList(data)
+      }
+    })
+
+  },[])
+
+  const rankingListItems = list.map((item,i) => <div key={i}> {item.nickname}: {item.points}p </div>)
+
+  return <>{rankingListItems}</>
+}
+
+export default function App() {
+
+  const [nickname, setNickname] = useState("")
+
+
+
+  const startGame = async ()=>{
+    
+    const {data, error} = await supabase.from('ranking').insert([
+      {
+        nickname: nickname,
+        points: 0
+      }
+    ]).select()
+
+    console.log("data: ", data, " error: ", error)
+
+  }
+
+  return <Layout>
+
+    <Navigation>
+      <HomeButton>Home</HomeButton>
+    </Navigation>
+
+    <label>Nimerkki</label>
+    <input value={nickname} onChange={(e)=> setNickname(e.target.value)}></input>
+    <button onClick={startGame}>Peliin!</button>
+
+    {nickname}
+
+    <RankingList></RankingList>
   </Layout>
 
 }
