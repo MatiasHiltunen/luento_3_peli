@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { Ball } from "../components/Ball"
 import { HomeButton, Layout, Navigation, Points } from "../components/common"
 import { useResize } from "../hooks/use_resize"
@@ -18,7 +19,7 @@ export function Game() {
   
     return <Layout>
       <Navigation>
-        <HomeButton>Home</HomeButton>
+        <Link to={"/"}>Koti</Link>
         <Points></Points>
       </Navigation>
   

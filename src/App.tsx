@@ -2,13 +2,15 @@ import { useState } from "react"
 import { supabase } from "./supabase"
 import { HomeButton, Layout, Navigation } from "./components/common"
 import { RankingList } from "./components/RankingList"
+import { Link } from "react-router-dom"
 
 
 export default function App() {
 
   const [nickname, setNickname] = useState("")
 
-  const startGame = async ()=>{
+  // TODO: Katsotaan myöhemmin miten tämä toteutetaan
+  const endGame = async ()=>{
     
     const {data, error} = await supabase.from('ranking').insert([
       {
@@ -21,6 +23,8 @@ export default function App() {
 
   }
 
+
+
   return <Layout>
 
     <Navigation>
@@ -29,9 +33,9 @@ export default function App() {
 
     <label>Nimerkki</label>
     <input value={nickname} onChange={(e)=> setNickname(e.target.value)}></input>
-    <button onClick={startGame}>Peliin!</button>
 
-    {nickname}
+    <Link to={"/game"}>Peliin!</Link>
+
 
     <RankingList></RankingList>
   </Layout>
